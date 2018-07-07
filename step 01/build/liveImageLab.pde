@@ -16,8 +16,7 @@ void imageSettings(){
 };
 
 void imageRender(int x, int y){
-  if (cam.available())
-    cam.read();
+  if (cam.available())cam.read();
 
-  image(cam,x , y);
+  image(cam, x, y);
 }

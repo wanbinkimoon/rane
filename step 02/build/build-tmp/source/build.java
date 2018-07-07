@@ -26,11 +26,17 @@ String dataPATH = "../../data";
 
 // ================================================================
 
+boolean DEBUG = true;
+
+// ================================================================
+
 public void settings(){ 
 	// fullScreen(P3D, 2);
 	// fullScreen(P3D, SPAN);
 	size(stageW, stageH);
-	pixelDensity(displayDensity());	
+	// pixelDensity(displayDensity());	
+	
+	canvasAdapt();
 }
 
 // ================================================================
@@ -153,26 +159,49 @@ public void audioDataUpdate(){
   }
 
 
+
 // ================================================================
 
 Capture cam;
+// PImage cuttedImg;
 
 // ================================================================
 
-int imgWidth = 400;
+int defaultWidth = 1280; // mac default 1280
+int defaultHeight = 960; // mac default 720
+float ratio = .5f;
+int realWidth;
+int realHeight;
+int imgWidth = 400; 
 int imgHeight = 400;
+
 // ================================================================
+
+public void canvasAdapt(){
+	realWidth = PApplet.parseInt(defaultWidth * ratio);
+	realHeight = PApplet.parseInt(defaultHeight * ratio);
+
+	println("CAM WIDTH: "+realWidth);
+	println("CAM HEIGHT: "+realHeight);
+
+	if(DEBUG) size(realWidth, realHeight * 2);
+}
 
 public void imageSettings(){
-	cam = new Capture(this, imgWidth, imgHeight);
+	cam = new Capture(this, realWidth, realHeight);
 	cam.start();
 };
 
-public void imageRender(int x, int y){
-  if (cam.available())
-    cam.read();
 
-  image(cam,x , y);
+
+public void captureEvent(Capture video) {  
+  cam.read();
+}
+
+public void imageRender(int x, int y){
+  image(cam, x, y);
+ // 	cuttedImg = get(stageW, stageH, imgWidth, imgHeight);
+	// image(cuttedImg, x, x);
 }
  
 
