@@ -7,6 +7,8 @@ String dataPATH = "../../data";
 
 boolean DEBUG = true;
 boolean GRID = true;
+boolean MIDI = false;
+
 boolean showHint = false;
 // ================================================================
 
@@ -22,8 +24,8 @@ void settings(){
 
 void setup() {
 	background(bgC);
-	// midiSetup();
-	// audioSettings();
+	midiSetup();
+	audioSettings();
 	imageSettings();
 	
 }
@@ -31,7 +33,8 @@ void setup() {
 // ================================================================
 void draw() {
 	background(bgC);
-	// audioDataUpdate();
+	midiMapper();
+	audioDataUpdate();
 	imageRender(0, 0);
 
 	if(showHint){

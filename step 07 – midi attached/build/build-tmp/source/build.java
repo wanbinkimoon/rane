@@ -28,6 +28,8 @@ String dataPATH = "../../data";
 
 boolean DEBUG = true;
 boolean GRID = true;
+boolean MIDI = false;
+
 boolean showHint = false;
 // ================================================================
 
@@ -43,7 +45,7 @@ public void settings(){
 
 public void setup() {
 	background(bgC);
-	// midiSetup();
+	midiSetup();
 	// audioSettings();
 	imageSettings();
 	
@@ -52,6 +54,7 @@ public void setup() {
 // ================================================================
 public void draw() {
 	background(bgC);
+	midiMapper();
 	// audioDataUpdate();
 	imageRender(0, 0);
 
@@ -201,8 +204,8 @@ public void renderDots(int x, int y, int side, int c, int yOffset){
 
 	// shaping 
 	int padding = (side / 16);
-	int realX = x + (padding / 2);
-	int realY = y + (padding / 2);
+	int realX = x + (side / 2);
+	int realY = y + (side / 2);
 
 	float b = brightness(c);
 	int sideElab = PApplet.parseInt(map(b, 0 , 255, side, 0));
@@ -314,13 +317,15 @@ MidiBus myBus;
 public void controllerChange(int channel, int number, int value) {  
 	midiUpdate(channel, number, value);
 
-  // Receive a controllerChange
-  // println();
-  // println("Controller Change:");
-  // println("--------");
-  // println("Channel:" + channel);
-  // println("Number:" + number);
-  // println("Value:" + value);
+	if(DEBUG && MIDI) {
+  	// Receive a controllerChange
+	  println();
+	  println("Controller Change:");
+	  println("--------");
+	  println("Channel:" + channel);
+	  println("Number:" + number);
+	  println("Value:" + value);
+	}
 }
 
 // ================================================================
@@ -445,7 +450,7 @@ public void arrowSwitch(int number){
 	if(number == 116) arrow[2] = !arrow[2];
 	if(number == 117) arrow[3] = !arrow[3];
 
-	// arrowMonitor();
+	arrowMonitor();
 }
 
 public void arrowMonitor(){
@@ -457,19 +462,41 @@ public void arrowMonitor(){
 	println("____________________\n");
 	println();
 }
+public void midiMapper(){
+	skip = PApplet.parseInt(map(knob[0], 0, 100, 2, 100));
+	reductionFactor = PApplet.parseInt(map(knob[1], 0, 100, 4, 100));
+
+	if(pad[0]){
+		CIRCLE = true;
+		RECTANGLES = false;
+		TRIANGLES = false;
+	}	
+	if(pad[1]){
+		CIRCLE = false;
+		RECTANGLES = true;
+		TRIANGLES = false;
+	}	
+	if(pad[2]){
+		CIRCLE = false;
+		RECTANGLES = false;
+		TRIANGLES = true;
+	}
+}
 
 float xoff = 0.0f;
 float n;
+float noiseSpeed = .01f;
 
 // ================================================================
 
 public void noiseUpdate(){
-	float speed = map(knob[4], 0, 100, .0f, .01f);
- 	xoff += speed;
+ 	xoff += noiseSpeed;
   n = noise(xoff);
 }
 int skip;
 int simpleColor;
+int reductionFactor;
+
 // ================================================================
 
 // Called in liveImageLab
@@ -510,15 +537,14 @@ public void reductionLoop(PImage img){
 // ================================================================
 
 public void colorReduciton(int c){
-	
-	int factor = 4;
+	reductionFactor = 4;
 
 	float r = red(c);
-	int simpleR = round(factor * r / 255) * (255 / factor);
+	int simpleR = round(reductionFactor * r / 255) * (255 / reductionFactor);
 	float g = green(c);
-	int simpleG = round(factor * g / 255) * (255 / factor);
+	int simpleG = round(reductionFactor * g / 255) * (255 / reductionFactor);
 	float b = blue(c);
-	int simpleB = round(factor * b / 255) * (255 / factor);
+	int simpleB = round(reductionFactor * b / 255) * (255 / reductionFactor);
 	simpleColor = color(simpleR, simpleG, simpleB);
 	
 	if(DEBUG && false) {

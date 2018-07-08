@@ -1,5 +1,7 @@
 int skip;
 color simpleColor;
+int reductionFactor;
+
 // ================================================================
 
 // Called in liveImageLab
@@ -9,7 +11,6 @@ void reductionSetup(){
 
 // ================================================================
 
-// Floyd-Steinberg Dithering
 // Called in liveImageLab
 void reductionLoop(PImage img){
 	if(!DEBUG) background(bgC);
@@ -40,15 +41,14 @@ void reductionLoop(PImage img){
 // ================================================================
 
 void colorReduciton(color c){
-	
-	int factor = 4;
+	reductionFactor = 4;
 
 	float r = red(c);
-	int simpleR = round(factor * r / 255) * (255 / factor);
+	int simpleR = round(reductionFactor * r / 255) * (255 / reductionFactor);
 	float g = green(c);
-	int simpleG = round(factor * g / 255) * (255 / factor);
+	int simpleG = round(reductionFactor * g / 255) * (255 / reductionFactor);
 	float b = blue(c);
-	int simpleB = round(factor * b / 255) * (255 / factor);
+	int simpleB = round(reductionFactor * b / 255) * (255 / reductionFactor);
 	simpleColor = color(simpleR, simpleG, simpleB);
 	
 	if(DEBUG && false) {

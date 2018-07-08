@@ -23,8 +23,8 @@ void renderDots(int x, int y, int side, color c, int yOffset){
 
 	// shaping 
 	int padding = (side / 16);
-	int realX = x + (padding / 2);
-	int realY = y + (padding / 2);
+	int realX = x + (side / 2);
+	int realY = y + (side / 2);
 
 	float b = brightness(c);
 	int sideElab = int(map(b, 0 , 255, side, 0));

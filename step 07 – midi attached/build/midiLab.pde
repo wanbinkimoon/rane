@@ -9,13 +9,15 @@ MidiBus myBus;
 void controllerChange(int channel, int number, int value) {  
 	midiUpdate(channel, number, value);
 
-  // Receive a controllerChange
-  // println();
-  // println("Controller Change:");
-  // println("--------");
-  // println("Channel:" + channel);
-  // println("Number:" + number);
-  // println("Value:" + value);
+	if(DEBUG && MIDI) {
+  	// Receive a controllerChange
+	  println();
+	  println("Controller Change:");
+	  println("--------");
+	  println("Channel:" + channel);
+	  println("Number:" + number);
+	  println("Value:" + value);
+	}
 }
 
 // ================================================================
@@ -140,7 +142,7 @@ void arrowSwitch(int number){
 	if(number == 116) arrow[2] = !arrow[2];
 	if(number == 117) arrow[3] = !arrow[3];
 
-	// arrowMonitor();
+	arrowMonitor();
 }
 
 void arrowMonitor(){

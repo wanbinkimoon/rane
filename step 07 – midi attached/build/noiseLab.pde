@@ -1,11 +1,11 @@
 
 float xoff = 0.0;
 float n;
+float noiseSpeed = .01;
 
 // ================================================================
 
 void noiseUpdate(){
-	float speed = map(knob[4], 0, 100, .0, .01);
- 	xoff += speed;
+ 	xoff += noiseSpeed;
   n = noise(xoff);
 }
