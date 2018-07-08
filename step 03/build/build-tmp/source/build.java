@@ -47,6 +47,7 @@ public void setup() {
 	// midiSetup();
 	audioSettings();
 	imageSettings();
+	
 }
 
 // ================================================================
@@ -159,7 +160,6 @@ public void audioDataUpdate(){
   }
 
 
-
 // ================================================================
 
 Capture cam;
@@ -168,7 +168,7 @@ Capture cam;
 // ================================================================
 
 int defaultWidth = 1280; // mac default 1280
-int defaultHeight = 960; // mac default 720
+int defaultHeight = 960; // mac default 960
 float ratio = .5f;
 int realWidth;
 int realHeight;
@@ -181,18 +181,17 @@ public void canvasAdapt(){
 	realWidth = PApplet.parseInt(defaultWidth * ratio);
 	realHeight = PApplet.parseInt(defaultHeight * ratio);
 
-	println("CAM WIDTH: "+realWidth);
-	println("CAM HEIGHT: "+realHeight);
-
-	if(DEBUG) size(realWidth, realHeight * 2);
+	if(DEBUG) 
+		size(realWidth, realHeight * 2);
+		println("CAM WIDTH : " + realWidth);
+		println("CAM HEIGHT: " + realHeight);
 }
 
 public void imageSettings(){
 	cam = new Capture(this, realWidth, realHeight);
 	cam.start();
+	reductionSetup();
 };
-
-
 
 public void captureEvent(Capture video) {  
   cam.read();
@@ -200,8 +199,9 @@ public void captureEvent(Capture video) {
 
 public void imageRender(int x, int y){
   image(cam, x, y);
- // 	cuttedImg = get(stageW, stageH, imgWidth, imgHeight);
+ 	// cuttedImg = get(stageW, stageH, imgWidth, imgHeight);
 	// image(cuttedImg, x, x);
+	reductionLoop(cam);
 }
  
 
@@ -367,6 +367,37 @@ public void noiseUpdate(){
 	float speed = map(knob[4], 0, 100, .0f, .01f);
  	xoff += speed;
   n = noise(xoff);
+}
+int skip;
+
+// ================================================================
+
+public void reductionSetup(){
+	skip = 10;
+}
+
+// ================================================================
+
+// Floyd-Steinberg Dithering
+public void reductionLoop(PImage img){
+	for (int x = 0; x < img.width; x += skip) {
+		for (int y = 0; y < img.height; y += skip) {
+			int index = x + y * img.width;
+			int p = img.pixels[index];
+			float r = red(p);
+			float g = green(p);
+			float b = blue(p);
+
+			if(DEBUG && index == 120)
+				println("r: " + r);
+				println("g: " + g);
+				println("b: " + b);
+				println("\n");
+				noFill(); stroke(255);
+				rect(x, y, skip, skip);
+				
+		}
+	}
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "build" };
