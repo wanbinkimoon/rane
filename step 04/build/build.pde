@@ -15,7 +15,6 @@ void settings(){
 	// fullScreen(P3D, SPAN);
 	size(stageW, stageH);
 	// pixelDensity(displayDensity());	
-	
 	canvasAdapt();
 }
 
