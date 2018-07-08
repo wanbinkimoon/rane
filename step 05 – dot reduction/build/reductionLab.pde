@@ -2,13 +2,15 @@ int skip;
 color simpleColor;
 // ================================================================
 
+// Called in liveImageLab
 void reductionSetup(){
-	skip = 30;
+	skip = 8;
 }
 
 // ================================================================
 
 // Floyd-Steinberg Dithering
+// Called in liveImageLab
 void reductionLoop(PImage img){
 	for (int x = 0; x < img.width; x += skip) {
 		for (int y = 0; y < img.height; y += skip) {
@@ -16,16 +18,13 @@ void reductionLoop(PImage img){
 			color p = img.pixels[index];
 
 			colorReduciton(p);
-
 			int yOffset = DEBUG ? img.height : 0;
-			noStroke(); fill(simpleColor);
-			rect(x, y + yOffset, skip, skip);
+			effecRender(x, y, skip, simpleColor, yOffset);
 
 			if(DEBUG && GRID) {
 				noFill(); stroke(255);
 				rect(x, y, skip, skip);
-
-				if(true) {
+				if(false) {
 					noStroke(); fill(255);
 					int gridIndex = (x / skip) + ((img.width / skip) * (y / skip));
 					// the magic number in the y operator is the fontSize divdedby 2
@@ -39,7 +38,9 @@ void reductionLoop(PImage img){
 // ================================================================
 
 void colorReduciton(color c){
-	int factor = 4;
+	
+	int factor = 100;
+
 	float r = red(c);
 	int simpleR = round(factor * r / 255) * (255 / factor);
 	float g = green(c);

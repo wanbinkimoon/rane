@@ -21,14 +21,14 @@ public class build extends PApplet {
 
 int stageW      = 800;
 int stageH      = 400;
-int bgC       = 0xff2F2F2F;
+int bgC       = 0xffFF9071;
 String dataPATH = "../../data";
 
 // ================================================================
 
 boolean DEBUG = true;
 boolean GRID = true;
-
+boolean showHint = false;
 // ================================================================
 
 public void settings(){ 
@@ -54,6 +54,17 @@ public void draw() {
 	background(bgC);
 	audioDataUpdate();
 	imageRender(0, 0);
+
+	if(showHint){
+		fill(75, 200); noStroke();
+  	rect(0, 0, width, 48);
+
+  	fill(0xff00AEFF);
+  	textAlign(LEFT);
+  	textSize(16);
+  	String helpString = "Q: Quit    P: Save screenshot in ./render folder ";
+  	text(helpString, 12, 28);
+	}
 }
 
 // ================================================================
@@ -62,9 +73,13 @@ public void keyPressed(){
 	switch (key) {
 		case 'q':
 			exit();
+			break;
 		case 'p':
 			screenShot();
-		break;
+			break;
+		case 'h':
+			showHelp();
+			break;
 	}
 }
 
@@ -83,6 +98,10 @@ public void screenShot(){
 		save(renderPATH + renderNum + ".png");
 		renderNum++;
 	}
+}
+
+public void showHelp(){
+	showHint = !showHint;
 }
 
 
@@ -157,6 +176,23 @@ public void audioDataUpdate(){
     audioIndex = map(knob[6], 0, 100, 0.0f, 0.1f);
     audioIndexStep = map(knob[7], 0, 100, 0.0f, 0.1f);
   }
+// Called in reductionLab
+public void effecRender(int x, int y, int side, int c, int yOffset){
+		int realColor = 0xffA73CCB;
+		noStroke(); fill(realColor);
+
+
+		// shaping 
+		int padding = (side / 16);
+		int realX = x + (padding / 2);
+		int realY = y + (padding / 2);
+
+		float b = brightness(c);
+		int sideElab = PApplet.parseInt(map(b, 0 , 255, side, 0));
+		int realSide = sideElab - padding;
+		// rect(realX, realY + yOffset, realSide, realSide);
+		ellipse(realX, realY + yOffset, realSide, realSide);
+}
 
 
 // ================================================================
@@ -370,13 +406,15 @@ int skip;
 int simpleColor;
 // ================================================================
 
+// Called in liveImageLab
 public void reductionSetup(){
-	skip = 30;
+	skip = 8;
 }
 
 // ================================================================
 
 // Floyd-Steinberg Dithering
+// Called in liveImageLab
 public void reductionLoop(PImage img){
 	for (int x = 0; x < img.width; x += skip) {
 		for (int y = 0; y < img.height; y += skip) {
@@ -384,16 +422,13 @@ public void reductionLoop(PImage img){
 			int p = img.pixels[index];
 
 			colorReduciton(p);
-
 			int yOffset = DEBUG ? img.height : 0;
-			noStroke(); fill(simpleColor);
-			rect(x, y + yOffset, skip, skip);
+			effecRender(x, y, skip, simpleColor, yOffset);
 
 			if(DEBUG && GRID) {
 				noFill(); stroke(255);
 				rect(x, y, skip, skip);
-
-				if(true) {
+				if(false) {
 					noStroke(); fill(255);
 					int gridIndex = (x / skip) + ((img.width / skip) * (y / skip));
 					// the magic number in the y operator is the fontSize divdedby 2
@@ -407,7 +442,9 @@ public void reductionLoop(PImage img){
 // ================================================================
 
 public void colorReduciton(int c){
-	int factor = 4;
+	
+	int factor = 100;
+
 	float r = red(c);
 	int simpleR = round(factor * r / 255) * (255 / factor);
 	float g = green(c);
@@ -415,6 +452,7 @@ public void colorReduciton(int c){
 	float b = blue(c);
 	int simpleB = round(factor * b / 255) * (255 / factor);
 	simpleColor = color(simpleR, simpleG, simpleB);
+	
 	if(DEBUG && false) {
 		println("r: " + r);
 		println("simpleR: " + simpleR);
