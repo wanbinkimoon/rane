@@ -26,12 +26,12 @@ String dataPATH = "../../data";
 
 // ================================================================
 
-boolean DEBUG = true;
+boolean DEBUG = false;
 boolean GRID = true;
 boolean MIDI = false;
 
 boolean showHint = false;
-// ================================================================
+// ============================================================
 
 public void settings(){ 
 	// fullScreen(P3D, 2);
@@ -181,18 +181,21 @@ public void audioDataUpdate(){
   }
 boolean CIRCLE = false;
 boolean RECTANGLES = false;
-boolean TRIANGLES = true;
+boolean TRIANGLES = false;
 
 // ================================================================
 
 // Called in reductionLab
 public void effecRender(int x, int y, int side, int c, int yOffset){
-	if(CIRCLE)
-		renderDots(x, y, side, c, yOffset);
-	if(RECTANGLES)
-		renderRects(x, y, side, c, yOffset);
+	// CIRCLE = brightness(c) < 60;
+	// if(CIRCLE)
+	// 	renderDots(x, y, side, c, yOffset);
+	TRIANGLES = brightness(c) > 125;
 	if(TRIANGLES)
 		renderTriangles(x, y, side, c, yOffset);
+	RECTANGLES = brightness(c) < 125;
+	if(RECTANGLES)
+		renderRects(x, y, side, c, yOffset);
 }
 
 // ================================================================
@@ -201,11 +204,10 @@ public void renderDots(int x, int y, int side, int c, int yOffset){
 	int realColor = 0xffA73CCB;
 	noStroke(); fill(realColor);
 
-
 	// shaping 
 	int padding = (side / 16);
-	int realX = x + (side / 2);
-	int realY = y + (side / 2);
+	int realX = x + ((side / 3) * 2);
+	int realY = y + ((side / 3) * 2);
 
 	float b = brightness(c);
 	int sideElab = PApplet.parseInt(map(b, 0 , 255, side, 0));
@@ -220,9 +222,8 @@ public void renderRects(int x, int y, int side, int c, int yOffset){
 	int realColor = 0xffA73CCB;
 	noStroke(); fill(realColor);
 
-
 	// shaping 
-	int padding = (side / 16);
+	int padding = (side / 8);
 	int realX = x + (padding / 2);
 	int realY = y + (padding / 2) + yOffset;
 
@@ -244,7 +245,7 @@ public void renderTriangles(int x, int y, int side, int c, int yOffset){
 	int realY = y + (padding / 2);
 
 	float b = brightness(c);
-	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 0));
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 2));
 
 	int realSide = sideLab - padding;
 	int x1triangle = realX; 
