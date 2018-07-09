@@ -7,9 +7,9 @@ Capture cam;
 
 // ================================================================
 
-int defaultWidth = 1280; // mac default 1280
-int defaultHeight = 960; // mac default 960
-float ratio = .5;
+int defaultWidth = 1024; // mac default 1280
+int defaultHeight = 640; // mac default 720
+float ratio = 1;
 int realWidth;
 int realHeight;
 

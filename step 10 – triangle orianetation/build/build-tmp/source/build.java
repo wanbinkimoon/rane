@@ -179,75 +179,116 @@ public void audioDataUpdate(){
     audioIndex = map(knob[6], 0, 100, 0.0f, 0.1f);
     audioIndexStep = map(knob[7], 0, 100, 0.0f, 0.1f);
   }
-boolean CIRCLE = false;
-boolean RECTANGLES = false;
-boolean TRIANGLES = false;
+
 
 // ================================================================
 
 // Called in reductionLab
 public void effecRender(int x, int y, int side, int c, int yOffset){
-	// CIRCLE = brightness(c) < 60;
-	// if(CIRCLE)
-	// 	renderDots(x, y, side, c, yOffset);
-	TRIANGLES = brightness(c) > 125;
-	if(TRIANGLES)
-		renderTriangles(x, y, side, c, yOffset);
-	RECTANGLES = brightness(c) < 125;
-	if(RECTANGLES)
-		renderRects(x, y, side, c, yOffset);
+	int realColor = 0xffA73CCB;
+	noStroke(); fill(realColor);
+	if(brightness(c) < 20)
+		bottomLef(x, y, side, c, yOffset);
+	if(brightness(c) >= 20 && brightness(c) < 80)
+		bottomRight(x, y, side, c, yOffset);
+	if(brightness(c) >= 80 && brightness(c) < 120)
+		topLeft(x, y, side, c, yOffset);
+	if(brightness(c) >= 120)
+		topRight(x, y, side, c, yOffset);
 }
 
 // ================================================================
 
-public void renderDots(int x, int y, int side, int c, int yOffset){
-	int realColor = 0xffA73CCB;
-	noStroke(); fill(realColor);
-
-	// shaping 
-	int padding = (side / 16);
-	int realX = x + ((side / 3) * 2);
-	int realY = y + ((side / 3) * 2);
-
-	float b = brightness(c);
-	int sideElab = PApplet.parseInt(map(b, 0 , 255, side, 0));
-	int realSide = sideElab - padding;
-	// rect(realX, realY + yOffset, realSide, realSide);
-	ellipse(realX, realY + yOffset, realSide, realSide);
-}
-
-// ================================================================
-
-public void renderRects(int x, int y, int side, int c, int yOffset){
-	int realColor = 0xffA73CCB;
-	noStroke(); fill(realColor);
-
-	// shaping 
-	int padding = (side / 8);
-	int realX = x + (padding / 2);
-	int realY = y + (padding / 2) + yOffset;
-
-	float b = brightness(c);
-	int sideElab = PApplet.parseInt(map(b, 0 , 255, side, 0));
-	int realSide = sideElab - padding;
-	rect(realX, realY, realSide, realSide);
-}
-
-// ================================================================
-
-public void renderTriangles(int x, int y, int side, int c, int yOffset){
-	int realColor = 0xffA73CCB;
-	noStroke(); fill(realColor);
-
+public void bottomLef(int x, int y, int side, int c, int yOffset){
 	// shaping 
 	int padding = (side / 16);
 	int realX = x + (padding / 2);
 	int realY = y + (padding / 2);
 
 	float b = brightness(c);
-	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 2));
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 1));
 
 	int realSide = sideLab - padding;
+	int x1triangle = realX; 
+	int y1triangle = realY + realSide; 
+	int x2triangle = realX; 
+	int y2triangle = realY; 
+	int x3triangle = realX + realSide; 
+	int y3triangle = realY + realSide; 
+
+	triangle(
+		x1triangle,
+		y1triangle + yOffset, 
+		x2triangle, 
+		y2triangle + yOffset, 
+		x3triangle, 
+		y3triangle + yOffset);
+}
+
+public void bottomRight(int x, int y, int side, int c, int yOffset){
+	// shaping 
+	int padding = (side / 16);
+	int realX = x + (padding / 2);
+	int realY = y + (padding / 2);
+
+	float b = brightness(c);
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 1));
+
+	int realSide = sideLab - padding;
+	int x1triangle = realX; 
+	int y1triangle = realY + realSide; 
+	int x2triangle = realX + realSide; 
+	int y2triangle = realY; 
+	int x3triangle = realX + realSide; 
+	int y3triangle = realY + realSide; 
+
+	triangle(
+		x1triangle,
+		y1triangle + yOffset, 
+		x2triangle, 
+		y2triangle + yOffset, 
+		x3triangle, 
+		y3triangle + yOffset);
+}
+
+public void topLeft(int x, int y, int side, int c, int yOffset){
+	// shaping 
+	int padding = (side / 16);
+	int realX = x + (padding / 2);
+	int realY = y + (padding / 2);
+
+	float b = brightness(c);
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 1));
+
+	int realSide = sideLab - padding;
+
+	int x1triangle = realX + realSide; 
+	int y1triangle = realY; 
+	int x2triangle = realX + realSide;
+	int y2triangle = realY + realSide; 
+	int x3triangle = realX; 
+	int y3triangle = realY; 
+
+	triangle(
+		x1triangle,
+		y1triangle + yOffset, 
+		x2triangle, 
+		y2triangle + yOffset, 
+		x3triangle, 
+		y3triangle + yOffset);
+}
+
+public void topRight(int x, int y, int side, int c, int yOffset){
+	// shaping 
+	int padding = (side / 16);
+	int realX = x + (padding / 2);
+	int realY = y + (padding / 2);
+
+	float b = brightness(c);
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, 1));
+
+	int realSide = sideLab - padding;
+
 	int x1triangle = realX; 
 	int y1triangle = realY + realSide; 
 	int x2triangle = realX; 
@@ -272,9 +313,9 @@ Capture cam;
 
 // ================================================================
 
-int defaultWidth = 1280; // mac default 1280
-int defaultHeight = 960; // mac default 960
-float ratio = .5f;
+int defaultWidth = 1024; // mac default 1280
+int defaultHeight = 640; // mac default 720
+float ratio = 1;
 int realWidth;
 int realHeight;
 
@@ -466,24 +507,6 @@ public void arrowMonitor(){
 public void midiMapper(){
 	skip = PApplet.parseInt(map(knob[8], 0, 100, 2, 100));
 	reductionFactor = PApplet.parseInt(map(knob[9], 0, 100, 4, 100));
-
-	if(pad[0]){
-		CIRCLE = true;
-		RECTANGLES = false;
-		TRIANGLES = false;
-	}	
-	
-	if(pad[1]){
-		CIRCLE = false;
-		RECTANGLES = true;
-		TRIANGLES = false;
-	}	
-
-	if(pad[2]){
-		CIRCLE = false;
-		RECTANGLES = false;
-		TRIANGLES = true;
-	}
 }
 
 float xoff = 0.0f;
