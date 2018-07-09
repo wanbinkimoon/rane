@@ -58,6 +58,8 @@ public void draw() {
 	audioDataUpdate();
 	imageRender(0, 0);
 
+	println("audioData[10]: "+audioData[10]);
+
 	if(showHint){
 		fill(75, 200); noStroke();
   	rect(0, 0, width, 48);
@@ -121,10 +123,10 @@ FFT audioFFT;
 int audioRange  = 12;
 int audioMax = 100;
 
-float audioAmp = 258.0f;
-float audioIndex = 0.015f;
+float audioAmp = 412.0f;
+float audioIndex = 0.69f;
+float audioIndexStep = 0.518f;
 float audioIndexAmp = audioIndex;
-float audioIndexStep = 0.692f;
 
 float[] audioData = new float[audioRange];
 
@@ -189,25 +191,26 @@ public void effecRender(int x, int y, int side, int c, int yOffset){
 	float monochrome = 255 - brightness(c);
 	float alpha = map(monochrome, 0, 255, 50, 255);
 	noStroke(); fill(realColor, monochrome);
-	bottomLef(x, y, side, c, yOffset);
 
-	// if(brightness(c) >= 20 && brightness(c) < 80)
-	// 	bottomRight(x, y, side, c, yOffset);
-	// if(brightness(c) >= 80 && brightness(c) < 120)
-	// 	topLeft(x, y, side, c, yOffset);
-	// if(brightness(c) >= 120)
-	// 	topRight(x, y, side, c, yOffset);
+	if(brightness(c) < 20)
+		dotGrid(x, y, side, c, yOffset, audioData[3]);
+	if(brightness(c) >= 20 && brightness(c) < 80)
+		dotGrid(x, y, side, c, yOffset, audioData[9]);
+	if(brightness(c) >= 80 && brightness(c) < 120)
+		dotGrid(x, y, side, c, yOffset, audioData[10]);
+	if(brightness(c) >= 120)	
+		dotGrid(x, y, side, c, yOffset, audioData[11]);
 }
 
 // ================================================================
 
-public void bottomLef(int x, int y, int side, int c, int yOffset){
+public void dotGrid(int x, int y, int side, int c, int yOffset, float audio){
 	// shaping 
 	int padding = (side / 16);
 	int realX = x + (padding / 2);
 	int realY = y + (padding / 2);
 
-	float b = brightness(c);
+	float b = brightness(c) * audio;
 	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, side / 2));
 
 	int realSide = sideLab - padding;
@@ -403,7 +406,7 @@ public void arrowSwitch(int number){
 	if(number == 116) arrow[2] = !arrow[2];
 	if(number == 117) arrow[3] = !arrow[3];
 
-	arrowMonitor();
+	// arrowMonitor();
 }
 
 public void arrowMonitor(){

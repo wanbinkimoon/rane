@@ -13,10 +13,10 @@ FFT audioFFT;
 int audioRange  = 12;
 int audioMax = 100;
 
-float audioAmp = 258.0;
-float audioIndex = 0.015;
+float audioAmp = 412.0;
+float audioIndex = 0.69;
+float audioIndexStep = 0.518;
 float audioIndexAmp = audioIndex;
-float audioIndexStep = 0.692;
 
 float[] audioData = new float[audioRange];
 

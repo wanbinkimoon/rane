@@ -142,7 +142,7 @@ void arrowSwitch(int number){
 	if(number == 116) arrow[2] = !arrow[2];
 	if(number == 117) arrow[3] = !arrow[3];
 
-	arrowMonitor();
+	// arrowMonitor();
 }
 
 void arrowMonitor(){
