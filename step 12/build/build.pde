@@ -1,8 +1,10 @@
 int stageW      = 800;
 int stageH      = 400;
-color bgC       = #FF9071;
+color bgC       = #512E67;
 String dataPATH = "../../data";
 
+// new palette
+// #F7BBEC #E38ED2 #DB69A9 #C75696 #9D3978 #512E67
 // ================================================================
 
 boolean DEBUG = false;

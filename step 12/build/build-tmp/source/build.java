@@ -21,9 +21,11 @@ public class build extends PApplet {
 
 int stageW      = 800;
 int stageH      = 400;
-int bgC       = 0xffFF9071;
+int bgC       = 0xff512E67;
 String dataPATH = "../../data";
 
+// new palette
+// #F7BBEC #E38ED2 #DB69A9 #C75696 #9D3978 #512E67
 // ================================================================
 
 boolean DEBUG = false;
@@ -57,8 +59,6 @@ public void draw() {
 	midiMapper();
 	audioDataUpdate();
 	imageRender(0, 0);
-
-	println("audioData[10]: "+audioData[10]);
 
 	if(showHint){
 		fill(75, 200); noStroke();
@@ -190,28 +190,38 @@ public void effecRender(int x, int y, int side, int c, int yOffset){
 	int realColor = 0xffA73CCB;
 	float monochrome = 255 - brightness(c);
 	float alpha = map(monochrome, 0, 255, 50, 255);
+	float bMap = map(brightness(c), 0, 255, 0, 6);
+
 	noStroke(); fill(realColor, monochrome);
 
-	if(brightness(c) < 20)
-		dotGrid(x, y, side, c, yOffset, audioData[3]);
-	if(brightness(c) >= 20 && brightness(c) < 80)
-		dotGrid(x, y, side, c, yOffset, audioData[9]);
-	if(brightness(c) >= 80 && brightness(c) < 120)
-		dotGrid(x, y, side, c, yOffset, audioData[10]);
-	if(brightness(c) >= 120)	
-		dotGrid(x, y, side, c, yOffset, audioData[11]);
+	// if(brightness(c) < 20)
+	// 	dotGrid(x, y, side, c, yOffset, audioData[3], );
+	// if(brightness(c) >= 20 && brightness(c) < 80)
+	if(bMap < 1)
+		dotGrid(x, y, side, c, yOffset, audioData[10], 0xff9D3978);
+	if(bMap >= 1 && bMap < 2)
+		dotGrid(x, y, side, c, yOffset, audioData[9], 0xffC75696);
+	if(bMap >= 2 && bMap < 3)
+		dotGrid(x, y, side, c, yOffset, audioData[0], 0xffDB69A9);
+	if(bMap >= 3 && bMap < 4)
+		dotGrid(x, y, side, c, yOffset, audioData[2], 0xffE38ED2);
+	if(bMap >= 4 && bMap < 5)
+		dotGrid(x, y, side, c, yOffset, audioData[1], 0xffF7BBEC);
+	if(bMap >= 5)	
+		dotGrid(x, y, side, c, yOffset, audioData[3], 0xffF7BBEC);
 }
 
 // ================================================================
 
-public void dotGrid(int x, int y, int side, int c, int yOffset, float audio){
+public void dotGrid(int x, int y, int side, int c, int yOffset, float audio, int renderC){
+	fill(renderC);
 	// shaping 
 	int padding = (side / 16);
 	int realX = x + (padding / 2);
 	int realY = y + (padding / 2);
 
-	float b = brightness(c) * audio;
-	int sideLab = PApplet.parseInt(map(b, 0 , 255, side, side / 2));
+	float b = audio * 100;
+	int sideLab = PApplet.parseInt(map(b, 0 , 255, 0, side));
 
 	int realSide = sideLab - padding;
 	ellipse(realX, realY + yOffset, realSide, realSide);
@@ -476,7 +486,7 @@ public void reductionLoop(PImage img){
 // ================================================================
 
 public void colorReduciton(int c){
-	reductionFactor = 4;
+	reductionFactor = 12;
 
 	float r = red(c);
 	int simpleR = round(reductionFactor * r / 255) * (255 / reductionFactor);

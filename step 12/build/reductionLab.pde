@@ -41,7 +41,7 @@ void reductionLoop(PImage img){
 // ================================================================
 
 void colorReduciton(color c){
-	reductionFactor = 4;
+	reductionFactor = 12;
 
 	float r = red(c);
 	int simpleR = round(reductionFactor * r / 255) * (255 / reductionFactor);
