@@ -31,12 +31,14 @@ void setup() {
 	imageSettings();
 	frame.setResizable(true);
   // frame.setIconImage(icon.image);
+  float bps = 70 / 60;
+  frameRate(bps);
 }
 
 // ================================================================
 void draw() {
-	frame.setTitle("🐸 – Rane – FPS: " + frameRate);
-
+	frame.setTitle("🐸 – Rane – FPS: " + frameRate + " – BPM: " + calcBPM(frameRate));
+	
 	background(bgC);
 	midiMapper();
 	audioDataUpdate();
@@ -87,6 +89,15 @@ void screenShot(){
 	}
 }
 
+// ================================================================
+
 void showHelp(){
 	showHint = !showHint;
+}
+
+// ================================================================
+
+float calcBPM(float fps){
+	float bpm = fps * 60;
+	return bpm;
 }

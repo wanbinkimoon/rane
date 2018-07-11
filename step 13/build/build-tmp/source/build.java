@@ -52,12 +52,14 @@ public void setup() {
 	imageSettings();
 	frame.setResizable(true);
   // frame.setIconImage(icon.image);
+  float bps = 70 / 60;
+  frameRate(bps);
 }
 
 // ================================================================
 public void draw() {
-	frame.setTitle("\ud83d\udc38 \u2013 Rane \u2013 FPS: " + frameRate);
-
+	frame.setTitle("\ud83d\udc38 \u2013 Rane \u2013 FPS: " + frameRate + " \u2013 BPM: " + calcBPM(frameRate));
+	
 	background(bgC);
 	midiMapper();
 	audioDataUpdate();
@@ -108,8 +110,17 @@ public void screenShot(){
 	}
 }
 
+// ================================================================
+
 public void showHelp(){
 	showHint = !showHint;
+}
+
+// ================================================================
+
+public float calcBPM(float fps){
+	float bpm = fps * 60;
+	return bpm;
 }
 
 
